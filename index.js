@@ -1,19 +1,37 @@
 const newsContainer = document.querySelector('.news-container')
+const categories = document.querySelectorAll('.nav-item .nav-link')
+console.log(categories)
 
-displayNews()
+fetchNews()
 async function fetchNews() {
     try{
         const resp = await fetch('https://newsapi.org/v2/everything?sources=bbc-news&apiKey=5235a3e37c4f470ca8af56361d4f8148')
         const respData = await resp.json()
         const newsData = respData.articles
-        return newsData
+        displayNews(newsData)
     } catch(err) {
         console.log("no internet")
     }
 }
 
-async function displayNews() {
-    const news = await fetchNews()
+for(let i=0; i<categories.length; i++) {
+    categories[i].onclick = async () => {
+        const news = await fetchNewsByCategory(categories[i].dataset.category)
+        console.log(news)
+        displayNews(news)
+    }
+}
+
+async function fetchNewsByCategory(category) {
+    const resp = await fetch(`https://newsapi.org/v2/everything?q=${category}&sources=bbc-news&apiKey=5235a3e37c4f470ca8af56361d4f8148`)
+    const respData = await resp.json()
+    const news = respData.articles
+    console.log(news)
+    return news
+}
+
+async function displayNews(news) {
+    newsContainer.innerHTML = ''
     news.forEach(news => allNews(news))
 }
 

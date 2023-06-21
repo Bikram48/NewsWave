@@ -5,3 +5,11 @@ nav {
 .navbar-nav {
     width: 100%;
 }
+
+.news-container {
+    row-gap: 2em;
+}
+
+img#spinner {
+    display: none;
+}
